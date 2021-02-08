@@ -42,9 +42,14 @@ return [
         ],
 
         'api' => [
-            'driver' => 'token',
+            'driver' => 'auth0',
             'provider' => 'users',
             'hash' => false,
+        ],
+
+        'auth0' => [
+            'driver' => 'auth0',
+            'provider' => 'auth0',
         ],
     ],
 
@@ -67,7 +72,12 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => 'eloquent',
+            'driver' => 'auth0',
+            'model' => App\Models\User::class,
+        ],
+
+        'auth0' => [
+            'driver' => 'auth0',
             'model' => App\Models\User::class,
         ],
 

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group([
+    'as' => 'api.',
+    'middleware' => ['force-json', 'auth:auth0']
+], function() {
+
+    Route::get('/user', function (Request $request) {
+        return response()->json(['user' => Auth::user()->getUserInfo()]);;
+    });
 });
+
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     $user = $request->user()->toArray();
+
+//     return response()->json([
+//         'user' => $user,
+//     ]);
+// });
