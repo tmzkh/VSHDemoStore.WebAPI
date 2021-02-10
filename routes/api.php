@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\RolesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -21,14 +22,12 @@ Route::group([
 ], function() {
 
     Route::get('/user', function (Request $request) {
-        return response()->json(['user' => Auth::user()->getUserInfo()]);;
+        return response()->json(Auth::user()->getAppUser());;
     });
+
+    Route::get('/roles', [RolesController::class, 'index']);
+
+    Route::post('/roles/assign-admin/{userId}', [RolesController::class, 'assignUserAdminRole']);
+
+    Route::post('/roles/remove-admin/{userId}', [RolesController::class, 'removeUserAdminRole']);
 });
-
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     $user = $request->user()->toArray();
-
-//     return response()->json([
-//         'user' => $user,
-//     ]);
-// });

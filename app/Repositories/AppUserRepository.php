@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\AuthUser;
 use App\Models\User as User;
 
 use Auth0\Login\Auth0User;
@@ -35,7 +36,7 @@ class AppUserRepository extends Auth0UserRepository
 
         $userInfo = $user->getAttributes();
 
-        $user = [
+        $userInfo = [
             'id' => $userInfo['id'] ?? '',
             'name' => $userInfo['name'] ?? '',
             'email' => $userInfo['email'] ?? '',
@@ -44,7 +45,7 @@ class AppUserRepository extends Auth0UserRepository
             'updated_at' => $userInfo['updated_at'] ?? '',
         ];
 
-        return new Auth0JWTUser($user);
+        return new AuthUser($userInfo, $user);
     }
 
     public function getUserByUserInfo(array $userinfo) : Authenticatable

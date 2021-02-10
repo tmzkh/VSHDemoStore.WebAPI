@@ -166,7 +166,7 @@ return [
          * Package Service Providers...
          */
         Auth0\Login\LoginServiceProvider::class,
-
+        Spatie\Permission\PermissionServiceProvider::class,
 
         /*
          * Application Service Providers...
