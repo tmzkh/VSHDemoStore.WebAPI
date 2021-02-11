@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\RolesController;
+use App\Http\Controllers\Api\UserInfoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -21,9 +22,7 @@ Route::group([
     'middleware' => ['force-json', 'auth:auth0']
 ], function() {
 
-    Route::get('/user', function (Request $request) {
-        return response()->json(Auth::user()->getAppUser());;
-    });
+    Route::get('/userinfo', [UserInfoController::class, 'index']);
 
     Route::get('/roles', [RolesController::class, 'index']);
 
