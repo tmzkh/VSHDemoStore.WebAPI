@@ -17,6 +17,7 @@
         "konekt/enum-eloquent": "^1.7",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
+        "matthewbdaly/laravel-azure-storage": "^1.6",
         "spatie/laravel-permission": "^4.0"
     },
     "require-dev": {

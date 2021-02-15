@@ -9,6 +9,12 @@ use Illuminate\Notifications\Notifiable;
 use Konekt\Enum\Eloquent\CastsEnums;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $sub
+ * @property \Illuminate\Support\Collection $avatars
+ */
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles, CastsEnums;
@@ -54,5 +60,13 @@ class User extends Authenticatable
         'gender' => Gender::class,
     ];
 
-
+    /**
+     * User has many avatars.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function avatars()
+    {
+        return $this->hasMany(Avatar::class, 'user_id', 'id');
+    }
 }
