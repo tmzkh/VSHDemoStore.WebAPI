@@ -15,14 +15,21 @@ class UserInfoResource extends JsonResource
      */
     public function toArray($request)
     {
+        $createdAt = Carbon::parse($this->created_at)->toIso8601String();
+
+        $updatedAt = Carbon::parse($this->updated_at)->toIso8601String();
+
         return [
             'id' => $this->id,
             'sub' => $this->sub,
             'email' => $this->email,
             'name' => $this->name,
             'roles' => $this->getRoleNames(),
-            'created_at' => Carbon::parse($this->created_at)->toIso8601String(),
-            'updated_at' => Carbon::parse($this->updated_at)->toIso8601String(),
+            'created_at' => $createdAt,
+            'updated_at' => $updatedAt,
+            'is_new_user' => ($updatedAt == $createdAt)
+                ? 'true'
+                : 'false',
         ];
     }
 }
