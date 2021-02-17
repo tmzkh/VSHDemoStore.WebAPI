@@ -4,9 +4,7 @@ namespace App\Repositories;
 
 use App\Models\AuthUser;
 use App\Models\User as User;
-
 use Auth0\Login\Auth0User;
-use Auth0\Login\Auth0JWTUser;
 use Auth0\Login\Repository\Auth0UserRepository;
 use Illuminate\Contracts\Auth\Authenticatable;
 use App\Traits\FetchesUserInfoFromAuth0;
@@ -41,6 +39,7 @@ class AppUserRepository extends Auth0UserRepository
             'name' => $userInfo['name'] ?? '',
             'email' => $userInfo['email'] ?? '',
             'sub' => $userInfo['sub'] ?? '',
+            'gender' => $userInfo['gender'] ?? '',
             'created_at' => $userInfo['created_at'] ?? '',
             'updated_at' => $userInfo['updated_at'] ?? '',
         ];

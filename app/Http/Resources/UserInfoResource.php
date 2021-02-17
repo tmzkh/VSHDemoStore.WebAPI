@@ -24,6 +24,7 @@ class UserInfoResource extends JsonResource
             'sub' => $this->sub,
             'email' => $this->email,
             'name' => $this->name,
+            'gender' => $this->gender->value(),
             'roles' => $this->getRoleNames(),
             'created_at' => $createdAt,
             'updated_at' => $updatedAt,

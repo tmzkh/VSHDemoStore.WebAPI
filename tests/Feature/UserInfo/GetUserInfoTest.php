@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\UserInfo;
 
+use App\Enums\Gender;
 use App\Models\AuthUser;
 use App\Models\User;
 use Database\Seeders\AppACLSeeder;
@@ -38,7 +39,8 @@ class GetUserInfoTest extends TestCase
         $user = User::factory()->create([
             'sub' => 'auth|subsub',
             'name' => 'First User',
-            'email' => 'first@email.com'
+            'email' => 'first@email.com',
+            'gender' => Gender::defaultValue(),
         ]);
 
         $user->assignRole(['Admin']);
@@ -53,6 +55,7 @@ class GetUserInfoTest extends TestCase
                 'name' => 'First User',
                 'sub' => 'auth|subsub',
                 'email' => 'first@email.com',
+                'gender' => 'other',
                 'roles' => [
                     'Admin',
                 ],
