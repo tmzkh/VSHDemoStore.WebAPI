@@ -6,7 +6,7 @@ use GuzzleHttp\Client as ApiClient;
 
 trait FetchesUserInfoFromAuth0
 {
-    private function fetchUserInfo(string $accessToken) : array
+    protected function fetchUserInfo(string $accessToken) : array
     {
         $client = new ApiClient(['base_uri' => 'https://' . env('AUTH0_DOMAIN')]);
 

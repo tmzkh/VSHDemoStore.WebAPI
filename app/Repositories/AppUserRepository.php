@@ -20,12 +20,27 @@ class AppUserRepository extends Auth0UserRepository
      * @return User
      */
     protected function upsertUser($profile): User {
-        return User::firstOrCreate(['sub' => $profile['sub']], [
+        $existingUser = User::whereSub($profile['sub'])->first();
+
+        if ($existingUser) {
+            return $existingUser;
+        }
+
+        $user = User::create([
+            'sub' => $profile['sub'],
             'email' => $profile['email'] ?? '',
             'name' => $profile['name'] ?? '',
         ]);
+
+        $user->assignRole('Customer');
+
+        return $user;
     }
 
+    /**
+     * @param array $decodedJwt
+     * @return AuthUser
+     */
     public function getUserByDecodedJWT(array $decodedJwt) : Authenticatable
     {
         $user = $this->fetchUserInfo(request()->bearerToken());
