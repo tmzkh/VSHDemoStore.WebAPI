@@ -18,7 +18,9 @@
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
         "matthewbdaly/laravel-azure-storage": "^1.6",
-        "spatie/laravel-permission": "^4.0"
+        "spatie/laravel-permission": "^4.0",
+        "vanilo/category": "^2.1",
+        "vanilo/product": "^2.1"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.9",
