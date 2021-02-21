@@ -6,7 +6,7 @@ use App\Enums\ProductAssetType;
 use App\Models\Product;
 use App\Models\ProductAsset;
 use App\Models\Taxon;
-use Database\Seeders\CategorySeeder;
+use Database\Seeders\TestCategorySeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -23,7 +23,7 @@ class ProductModelTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed(CategorySeeder::class);
+        $this->seed(TestCategorySeeder::class);
     }
 
     /** @test */

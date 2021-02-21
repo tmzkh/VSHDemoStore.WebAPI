@@ -6,9 +6,9 @@ use App\Models\Taxon;
 use App\Models\Taxonomy;
 use Illuminate\Database\Seeder;
 
-class CategorySeeder extends Seeder
+class DemoCategorySeeder extends Seeder
 {
-    /**
+        /**
      * Run the database seeds.
      *
      * @return void
@@ -16,7 +16,7 @@ class CategorySeeder extends Seeder
     public function run()
     {
         $baseCategory = Taxonomy::create([
-            'name' => 'Clothes'
+            'name' => 'Vaatteet'
         ]);
 
         $subCategories = $this->seedFirstLevelCategories($baseCategory);
@@ -27,7 +27,7 @@ class CategorySeeder extends Seeder
     }
 
     /**
-     * Seed subcategories (men, women, unisex) for base category (e.g. clothes)
+     * Seed subcategories (miehet, naiset, unisex) for base category (e.g. clothes)
      *
      * @param Taxonomy $category
      * @return array
@@ -36,7 +36,7 @@ class CategorySeeder extends Seeder
     {
         $subCategories = [];
 
-        foreach (['men', 'women', 'unisex'] as $subcategoryName) {
+        foreach (['miehet', 'naiset', 'unisex'] as $subcategoryName) {
             $subCategories[] = Taxon::create([
                 'name' => $subcategoryName,
                 'taxonomy_id' => $category->id
@@ -57,7 +57,7 @@ class CategorySeeder extends Seeder
     {
         $subCategories = [];
 
-        foreach (['T-shirts', 'Trousers', 'Shoes'] as $subcategoryName) {
+        foreach (['T-paidat', 'Housut', 'Kengät'] as $subcategoryName) {
             $subCategories[] = Taxon::create([
                 'name' => $subcategoryName,
                 'taxonomy_id' => $baseCategory->id,

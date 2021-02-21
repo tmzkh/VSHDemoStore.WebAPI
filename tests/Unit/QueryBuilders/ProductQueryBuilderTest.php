@@ -6,21 +6,15 @@ use App\Models\Product;
 use App\Models\Taxon;
 use App\Models\Taxonomy;
 use App\QueryBuilders\ProductQueryBuilder;
-use Database\Seeders\CategorySeeder;
+use Database\Seeders\TestCategorySeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Tests\Helpers\Traits\SetsUpProductListing;
 use Tests\TestCase;
 
 class ProductQueryBuilderTest extends TestCase
 {
-    use RefreshDatabase;
-
-    /** @var \App\Models\Product */
-    private $product1,
-        $product2,
-        $product3,
-        $product4,
-        $product5;
+    use RefreshDatabase, SetsUpProductListing;
 
     /**
      * Setup the test environment.
@@ -31,30 +25,9 @@ class ProductQueryBuilderTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed(CategorySeeder::class);
+        $this->seed(TestCategorySeeder::class);
 
         $this->setUpProducts();
-    }
-
-    public function setUpProducts()
-    {
-        $menTaxonRoot = Taxon::roots()->whereSlug('men')->first();
-        $womenTaxonRoot = Taxon::roots()->whereSlug('women')->first();
-
-        $this->product1 = Product::create(['name' => 'Black T-shirt', 'sku'  => 'ts-01']);
-        $this->product1->addTaxon($menTaxonRoot->children()->whereSlug('t-shirts')->first());
-
-        $this->product2 = Product::create(['name' => 'Blue Shoe', 'sku'  => 'ts-02']);
-        $this->product2->addTaxon($menTaxonRoot->children()->whereSlug('shoes')->first());
-
-        $this->product3 = Product::create(['name' => 'Red T-shirt', 'sku'  => 'ts-03']);
-        $this->product3->addTaxon($menTaxonRoot->children()->whereSlug('t-shirts')->first());
-
-        $this->product4 = Product::create(['name' => 'W Blue T-shirt','sku'  => 'ts-04']);
-        $this->product4->addTaxon($womenTaxonRoot->children()->whereSlug('t-shirts')->first());
-
-        $this->product5 = Product::create(['name' => 'W Red Shoe', 'sku'  => 'ts-05']);
-        $this->product5->addTaxon($womenTaxonRoot->children()->whereSlug('shoes')->first());
     }
 
     /** @test */
@@ -62,7 +35,7 @@ class ProductQueryBuilderTest extends TestCase
     {
         $products = (new ProductQueryBuilder())->build([
             'women'
-        ])->get();
+        ], [], null)->get();
 
         $this->assertCount(2, $products);
         $this->assertTrue($products->contains($this->product4));
@@ -72,7 +45,7 @@ class ProductQueryBuilderTest extends TestCase
     /** @test */
     public function itCanQueryProductsBySecondTaxonLevel()
     {
-        $products = (new ProductQueryBuilder())->build([
+        $products = (new ProductQueryBuilder())->build([], [
             't-shirts'
         ])->get();
 
@@ -85,9 +58,10 @@ class ProductQueryBuilderTest extends TestCase
     /** @test */
     public function itCanQueryProductsByBothTaxonLevels()
     {
-        $products = (new ProductQueryBuilder())->build([
-            'men', 't-shirts'
-        ])->get();
+        $products = (new ProductQueryBuilder())->build(
+            ['men'],
+            ['t-shirts']
+        )->get();
 
         $this->assertCount(2, $products);
         $this->assertTrue($products->contains($this->product1));
@@ -111,7 +85,7 @@ class ProductQueryBuilderTest extends TestCase
 
         $product6->addTaxon($fakeTaxon);
 
-        $products = (new ProductQueryBuilder())->build([], $taxonomy->slug)->get();
+        $products = (new ProductQueryBuilder())->build([], [], $taxonomy->slug)->get();
 
         $this->assertCount(5, $products);
         $this->assertTrue($products->contains($this->product1));
@@ -146,7 +120,7 @@ class ProductQueryBuilderTest extends TestCase
 
         $products = (new ProductQueryBuilder())->build([
             'women'
-        ], $taxonomy->slug)->get();
+        ], [], $taxonomy->slug)->get();
 
         $this->assertCount(2, $products);
         $this->assertTrue($products->contains($this->product4));
@@ -176,7 +150,7 @@ class ProductQueryBuilderTest extends TestCase
 
         $product6->addTaxon($fakeSecondTaxon);
 
-        $products = (new ProductQueryBuilder())->build([
+        $products = (new ProductQueryBuilder())->build([], [
             't-shirts'
         ], $taxonomy->slug)->get();
 
@@ -209,9 +183,11 @@ class ProductQueryBuilderTest extends TestCase
 
         $product6->addTaxon($fakeSecondTaxon);
 
-        $products = (new ProductQueryBuilder())->build([
-            'men', 't-shirts'
-        ], $taxonomy->slug)->get();
+        $products = (new ProductQueryBuilder())->build(
+            ['men'],
+            ['t-shirts'],
+            $taxonomy->slug
+        )->get();
 
         $this->assertCount(2, $products);
         $this->assertTrue($products->contains($this->product1));

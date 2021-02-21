@@ -14,7 +14,5 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(AppACLSeeder::class);
-
-        $this->call(CategorySeeder::class);
     }
 }

@@ -17,10 +17,6 @@ class RolesController extends Controller
      */
     public function index()
     {
-        if (! Auth::user()->getAppUser()->hasRole('Admin')) {
-            return response('Unauthorized', 401);
-        }
-
         return response()->json(Role::all(['id', 'name']));
     }
 
@@ -32,10 +28,6 @@ class RolesController extends Controller
      */
     public function assignUserAdminRole($userId)
     {
-        if (! Auth::user()->getAppUser()->hasRole('Admin')) {
-            return response('Unauthorized', 401);
-        }
-
         $user = User::findOrFail($userId);
 
         if ($user->hasRole('Customer')) {
@@ -46,7 +38,7 @@ class RolesController extends Controller
             $user->assignRole('Admin');
         }
 
-        return response('', 200);
+        return response()->json([], 200);
     }
 
     /**
@@ -57,16 +49,12 @@ class RolesController extends Controller
      */
     public function removeUserAdminRole($userId)
     {
-        if (! Auth::user()->getAppUser()->hasRole('Admin')) {
-            return response('Unauthorized', 401);
-        }
-
         $user = User::findOrFail($userId);
 
         if ($user->hasRole('Admin')) {
             $user->removeRole('Admin');
         }
 
-        return response('', 200);
+        return response()->json([], 200);
     }
 }

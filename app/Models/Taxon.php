@@ -55,4 +55,13 @@ use Vanilo\Category\Models\Taxon as BaseTaxon;
 class Taxon extends BaseTaxon
 {
     use HasProducts;
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'pivot',
+    ];
 }

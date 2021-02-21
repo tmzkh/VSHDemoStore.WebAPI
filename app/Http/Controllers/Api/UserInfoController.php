@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Enums\Gender;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateUserInfoRequest;
+use App\Http\Requests\Api\UpdateUserInfoRequest;
 use App\Http\Resources\UserInfoResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,7 +29,7 @@ class UserInfoController extends Controller
     /**
      * Update authenticated user's user info.
      *
-     * @param UpdateUserInfoRequest $request
+     * @param App\Http\Requests\Api\UpdateUserInfoRequest $request
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateUserInfoRequest $request)
