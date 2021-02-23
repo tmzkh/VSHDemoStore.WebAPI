@@ -19,8 +19,11 @@ class UserInfoController extends Controller
      */
     public function index()
     {
-        return response()
-            ->json(UserInfoResource::make(Auth::user()->getAppUser()));
+        $user = Auth::user()->getAppUser();
+
+        $user->load(['avatars']);
+
+        return response()->json(UserInfoResource::make($user));
     }
 
     /**

@@ -31,6 +31,7 @@ class UserInfoResource extends JsonResource
             'is_new_user' => ($updatedAt == $createdAt)
                 ? 'true'
                 : 'false',
+            'avatars' => $this->avatars,
         ];
     }
 }

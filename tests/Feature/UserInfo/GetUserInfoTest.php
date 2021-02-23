@@ -4,6 +4,7 @@ namespace Tests\Feature\UserInfo;
 
 use App\Enums\Gender;
 use App\Models\AuthUser;
+use App\Models\Avatar;
 use App\Models\User;
 use Database\Seeders\AppACLSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -45,6 +46,11 @@ class GetUserInfoTest extends TestCase
 
         $user->assignRole(['Admin']);
 
+        Avatar::create([
+            'user_id' => $user->id,
+            'path' => 'avatar_1010101.obj'
+        ]);
+
         $authUser = new AuthUser($user->getAttributes(), $user);
 
         $this->actingAs($authUser, 'auth0');
@@ -58,6 +64,11 @@ class GetUserInfoTest extends TestCase
                 'gender' => 'other',
                 'roles' => [
                     'Admin',
+                ],
+                'avatars' => [
+                    [
+                        'path' => 'avatar_1010101.obj'
+                    ]
                 ],
             ]);
     }
