@@ -38,7 +38,7 @@ class UpdateProductsTest extends TestCase
     /** @test */
     public function unauthenticatedCannotUpdateProduct()
     {
-        $this->json('PUT', '/api/products/' . $this->product->id, [
+        $this->json('PUT', '/api/products/' . $this->product->slug, [
             'name' => 'New product',
             'sku' => 'np-01',
             'taxon_id' => 1
@@ -59,7 +59,7 @@ class UpdateProductsTest extends TestCase
     {
         $this->setUpUser([], 'Customer');
 
-        $this->json('PUT', '/api/products/' . $this->product->id, [
+        $this->json('PUT', '/api/products/' . $this->product->slug, [
             'name' => 'New product',
             'sku' => 'np-01',
             'taxon_id' => 1
@@ -80,7 +80,7 @@ class UpdateProductsTest extends TestCase
     {
         $this->setUpAdminUser();
 
-        $this->json('PUT', '/api/products/' . $this->product->id, [])
+        $this->json('PUT', '/api/products/' . $this->product->slug, [])
             ->assertJson([
                 'errors' => [
                     'name' => [
@@ -95,7 +95,7 @@ class UpdateProductsTest extends TestCase
                 ]
             ]);
 
-        $this->json('PUT', '/api/products/' . $this->product->id, [
+        $this->json('PUT', '/api/products/' . $this->product->slug, [
             'name' => 'ab'
         ])
             ->assertJson([
@@ -106,7 +106,7 @@ class UpdateProductsTest extends TestCase
                 ]
             ]);
 
-        $this->json('PUT', '/api/products/' . $this->product->id, [
+        $this->json('PUT', '/api/products/' . $this->product->slug, [
             'taxon_id' => '25' // non existing
         ])
             ->assertJson([
@@ -129,7 +129,7 @@ class UpdateProductsTest extends TestCase
             }
         )->first();
 
-        $this->json('PUT', '/api/products/' . $this->product->id, [
+        $this->json('PUT', '/api/products/' . $this->product->slug, [
             'name' => 'Updated product',
             'sku' => 'up-01',
             'taxon_id' => $taxon->id
@@ -167,7 +167,7 @@ class UpdateProductsTest extends TestCase
             }
         )->first();
 
-        $this->json('PUT', '/api/products/' . $this->product->id, [
+        $this->json('PUT', '/api/products/' . $this->product->slug, [
             'name' => 'Updated product',
             'sku' => 'up-01',
             'taxon_id' => $taxon->id

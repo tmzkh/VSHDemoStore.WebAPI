@@ -4,27 +4,31 @@ namespace Tests\Helpers\Traits;
 
 use App\Models\Product;
 use App\Models\Taxon;
+use Illuminate\Support\Collection;
 
 trait SetsUpProductListing
 {
     /** @var \App\Models\Product */
-    private $product1,
+    protected $product1,
         $product2,
         $product3,
         $product4,
         $product5;
 
     /** @var \App\Models\Taxon */
-    private
+    protected
         $menTaxonRoot,
         $womenTaxonRoot;
+
+    /** @var \Illuminate\Support\Collection */
+    protected $productCollection;
 
     /**
      * Set up list of products.
      *
      * @return void
      */
-    private function setUpProducts()
+    protected function setUpProducts()
     {
         $this->menTaxonRoot = Taxon::roots()->whereSlug('men')->first();
         $this->womenTaxonRoot = Taxon::roots()->whereSlug('women')->first();
@@ -43,5 +47,23 @@ trait SetsUpProductListing
 
         $this->product5 = Product::create(['name' => 'W Red Shoe', 'sku'  => 'ts-05']);
         $this->product5->addTaxon($this->womenTaxonRoot->children()->whereSlug('shoes')->first());
+
+        $this->productCollection = collect([
+            $this->product1,
+            $this->product2,
+            $this->product3,
+            $this->product4,
+            $this->product5
+        ]);
+    }
+
+    /**
+     * Return all test products as collection.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    protected function collectAllProducts(): Collection
+    {
+        return $this->productCollection;
     }
 }

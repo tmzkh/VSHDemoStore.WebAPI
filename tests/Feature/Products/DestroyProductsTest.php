@@ -39,7 +39,7 @@ class DestroyProductsTest extends TestCase
     /** @test */
     public function unauthenticatedUserCannotDestroyProduct()
     {
-        $this->json('DELETE', '/api/products/' . $this->product->id)
+        $this->json('DELETE', '/api/products/' . $this->product->slug)
             ->assertStatus(401)
             ->assertJson([
                 'message' => 'Unauthenticated.'
@@ -57,7 +57,7 @@ class DestroyProductsTest extends TestCase
     {
         $this->setUpUser([], 'Customer');
 
-        $this->json('DELETE', '/api/products/' . $this->product->id)
+        $this->json('DELETE', '/api/products/' . $this->product->slug)
             ->assertStatus(401)
             ->assertJson([
                 'message' => 'Unauthorized.'
@@ -75,7 +75,7 @@ class DestroyProductsTest extends TestCase
     {
         $this->setUpAdminUser();
 
-        $this->json('DELETE', '/api/products/' . $this->product->id)
+        $this->json('DELETE', '/api/products/' . $this->product->slug)
             ->assertStatus(204);
     }
 }

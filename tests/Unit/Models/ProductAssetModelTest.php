@@ -24,4 +24,25 @@ class ProductAssetModelTest extends TestCase
 
         $this->assertInstanceOf(ProductAssetType::class, $productAsset->type);
     }
+
+    /** @test */
+    public function modelAssetCanHasMaterials()
+    {
+        $product = Product::create(['name' => 'Name', 'sku' => 'p_01']);
+
+        $model = ProductAsset::create([
+            'product_id' => $product->id,
+            'path' => 'image.jpeg',
+            'type' => ProductAssetType::MODEL
+        ]);
+
+        $material = ProductAsset::create([
+            'product_id' => $product->id,
+            'model_id' => $model->id,
+            'path' => 'image.jpeg',
+            'type' => ProductAssetType::MODEL
+        ]);
+
+        $this->assertTrue($model->materials->contains($material));
+    }
 }

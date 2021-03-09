@@ -34,15 +34,17 @@ class DemoProductSeeder extends Seeder
                     break;
             }
 
-            $index = ++$i;
+            for ($j=0; $j < 3; $j++) {
+                $index = ++$i;
 
-            /** @var \App\Models\Product */
-            $product = Product::create([
-                'name' => $name . ' ' . $index,
-                'sku' => 'product_' . $index
-            ]);
+                /** @var \App\Models\Product */
+                $product = Product::create([
+                    'name' => $name . ' ' . $index,
+                    'sku' => 'product_' . $index
+                ]);
 
-            $product->addTaxon($taxon);
+                $product->addTaxon($taxon);
+            }
         }
     }
 }

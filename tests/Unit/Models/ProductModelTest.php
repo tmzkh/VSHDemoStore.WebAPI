@@ -107,4 +107,70 @@ class ProductModelTest extends TestCase
 
         $this->assertTrue($product->assets->contains($image));
     }
+
+    /** @test */
+    public function itCanLoadAssetsOfTypeImage()
+    {
+        $product = Product::create([
+            'name' => 'Black T-shirt',
+            'sku'  => 'ts-01'
+        ]);
+
+        $image = ProductAsset::create([
+            'product_id' => $product->id,
+            'path' => 'image.jpeg',
+            'type' => ProductAssetType::IMAGE
+        ]);
+
+        $this->assertTrue($product->images->contains($image));
+    }
+
+    /** @test */
+    public function itCanLoadAssetsOfTypeModel()
+    {
+        $product = Product::create([
+            'name' => 'Black T-shirt',
+            'sku'  => 'ts-01'
+        ]);
+
+        $model = ProductAsset::create([
+            'product_id' => $product->id,
+            'path' => 'image.obj',
+            'type' => ProductAssetType::MODEL
+        ]);
+
+        $this->assertTrue($product->models->contains($model));
+    }
+
+    /** @test */
+    public function productsCanBeScopedByFittable()
+    {
+        $product = Product::create([
+            'name' => 'Black T-shirt',
+            'sku'  => 'ts-01'
+        ]);
+
+        ProductAsset::create([
+            'product_id' => $product->id,
+            'path' => 'image.obj',
+            'type' => ProductAssetType::MODEL
+        ]);
+
+        $product2 = Product::create([
+            'name' => 'Blue T-shirt',
+            'sku'  => 'ts-02'
+        ]);
+
+        ProductAsset::create([
+            'product_id' => $product2->id,
+            'path' => 'image.jpeg',
+            'type' => ProductAssetType::IMAGE
+        ]);
+
+        $products = Product::fittable()->pluck('id');
+
+        $this->assertCount(1, $products);
+        $this->assertTrue($products->contains($product->id));
+        $this->assertFalse($products->contains($product2->id));
+    }
 }

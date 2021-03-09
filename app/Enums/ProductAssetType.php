@@ -10,4 +10,5 @@ class ProductAssetType extends Enum
 
     const IMAGE = 'image';
     const MODEL = '3d-model';
+    const MATERIAL = 'material';
 }

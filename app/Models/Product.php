@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\ProductAssetType;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Vanilo\Category\Traits\HasTaxons;
 use Vanilo\Product\Models\Product as BaseProduct;
@@ -58,6 +60,16 @@ class Product extends BaseProduct
     use HasTaxons;
 
     /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    /**
      * Product has many assets.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -65,5 +77,58 @@ class Product extends BaseProduct
     public function assets(): HasMany
     {
         return $this->hasMany(ProductAsset::class, 'product_id');
+    }
+
+    /**
+     * Prodcut has many assets type of image.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function images()
+    {
+        return $this->assets()->images();
+    }
+
+    /**
+     * Prodcut has many assets type of 3D-model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function models()
+    {
+        return $this->assets()->models();
+    }
+
+    /**
+     * Prodcut has many assets type of image and 3D-model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function imagesAndModels()
+    {
+        return $this->assets()->imagesAndModels();
+    }
+
+    /**
+     * Has models, so can be fitted.
+     *
+     * @return boolean
+     */
+    public function isFittable(): bool
+    {
+        return $this->models()->count() > 0;
+    }
+
+    /**
+     * Scope products that has 3D-models.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return void
+     */
+    public function scopeFittable(Builder $query)
+    {
+        return $query->whereHas('models', function(Builder $q) {
+            return $q->whereType(ProductAssetType::MODEL);
+        });
     }
 }

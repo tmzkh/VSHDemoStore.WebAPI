@@ -31,6 +31,10 @@ use Konekt\Enum\Eloquent\CastsEnums;
  * @method static \Illuminate\Database\Eloquent\Builder|ProductAsset whereProductId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProductAsset whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProductAsset whereUpdatedAt($value)
+ * @property int|null $model_id
+ * @property string|null $url
+ * @method static Builder|ProductAsset whereModelId($value)
+ * @method static Builder|ProductAsset whereUrl($value)
  */
 class ProductAsset extends Model
 {
@@ -43,7 +47,9 @@ class ProductAsset extends Model
      */
     protected $fillable = [
         'product_id',
+        'model_id',
         'path',
+        'url',
         'type',
     ];
 
@@ -81,24 +87,47 @@ class ProductAsset extends Model
     }
 
     /**
-     * Scope only images
+     * Scope only images.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder|ProductAsset
+     * @return \Illuminate\Database\Eloquent\Builder|ProductAsset[]
      */
     public function scopeImages(Builder $query)
     {
-        return $query->whereType('image');
+        return $query->whereType(ProductAssetType::IMAGE);
     }
 
     /**
-     * Scope only 3d-models
+     * Scope only 3d-models.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder|ProductAsset
+     * @return \Illuminate\Database\Eloquent\Builder|ProductAsset[]
      */
     public function scopeModels(Builder $query)
     {
-        return $query->whereType('image');
+        return $query->whereType(ProductAssetType::MODEL);
+    }
+
+    /**
+     * Scope images and 3d-models.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder|ProductAsset[]
+     */
+    public function scopeImagesAndModels(Builder $query)
+    {
+        return $query
+            ->whereType(ProductAssetType::IMAGE)
+            ->orWhere('type', '=', ProductAssetType::MODEL);
+    }
+
+    /**
+     * 3D model has many materials.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function materials()
+    {
+        return $this->hasMany(ProductAsset::class, 'model_id', 'id');
     }
 }

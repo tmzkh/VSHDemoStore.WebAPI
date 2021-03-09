@@ -42,17 +42,53 @@ class ProductController extends Controller
 
         $query->select('id', 'name', 'slug', 'sku');
 
+        if ($request->query('onlyFittable')) {
+            $query->fittable();
+        }
+
         return ProductResourceCollection::make(
             $query
                 ->with([
                     'taxons:id,parent_id,name,slug',
                     'taxons.parent:id,parent_id,name,slug',
-                    'assets' => function ($q) {
-                        $q->images();
-                    }
+                    'assets' => function ($q) use ($request) {
+                        if (! Auth::check() || ! $request->query('withImagesAndModels')) {
+                            return $q->images();
+                        }
+
+                        return $q->imagesAndModels()
+                            ->with(['materials']);
+                    },
                 ])
+                ->withCount('models')
                 ->paginate(15)
                 ->appends($request->query()));
+    }
+
+    /**
+     * Display a specific product.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Product $product
+     * @return void
+     */
+    public function show(Request $request, Product $product)
+    {
+        $product->load([
+            'taxons:id,parent_id,name,slug',
+            'taxons.parent:id,parent_id,name,slug',
+            'assets' => function ($q) use ($request) {
+                if (! Auth::check() || ! $request->query('withImagesAndModels')) {
+                    return $q->images();
+                }
+
+                return $q->imagesAndModels()
+                    ->with(['materials']);
+            },
+        ])
+            ->loadCount('models');
+
+        return response()->json(ProductResource::make($product), 200);
     }
 
     /**
@@ -108,8 +144,13 @@ class ProductController extends Controller
 
         $product->load([
             'taxons:id,parent_id,name,slug',
-            'taxons.parent:id,parent_id,name,slug'
-        ]);
+            'taxons.parent:id,parent_id,name,slug',
+            'assets' => function ($q) {
+                return $q->imagesAndModels()
+                    ->with(['materials']);
+            },
+        ])
+            ->loadCount('models');
 
         return response()->json(ProductResource::make($product), 200);
     }
