@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::group([
     'as' => 'api.',
-    'middleware' => ['force-json']
+    'middleware' => ['force-json', 'api']
 ], function() {
 
     /*

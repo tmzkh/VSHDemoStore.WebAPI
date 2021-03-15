@@ -72,6 +72,10 @@ class GetProductAssetsTest extends TestCase
                         'type' => ProductAssetType::IMAGE,
                     ]
                 ]
+            ])
+            ->assertJsonMissing([
+                'product_id' => $this->product->id,
+                'type' => ProductAssetType::MODEL,
             ]);
     }
 

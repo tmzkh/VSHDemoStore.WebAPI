@@ -20,7 +20,7 @@ class ProductAssetController extends Controller
      */
     public function index(Product $product)
     {
-        if (! Auth::check()) {
+        if (! Auth::guard('auth0')->check()) {
             $assets = $product->images;
         } else {
             $assets = $product->imagesAndModels;

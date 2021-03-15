@@ -52,7 +52,7 @@ class ProductController extends Controller
                     'taxons:id,parent_id,name,slug',
                     'taxons.parent:id,parent_id,name,slug',
                     'assets' => function ($q) use ($request) {
-                        if (! Auth::check() || ! $request->query('withImagesAndModels')) {
+                        if (! Auth::guard('auth0')->check() || ! $request->query('withImagesAndModels')) {
                             return $q->images();
                         }
 
@@ -78,7 +78,7 @@ class ProductController extends Controller
             'taxons:id,parent_id,name,slug',
             'taxons.parent:id,parent_id,name,slug',
             'assets' => function ($q) use ($request) {
-                if (! Auth::check() || ! $request->query('withImagesAndModels')) {
+                if (! Auth::guard('auth0')->check() || ! $request->query('withImagesAndModels')) {
                     return $q->images();
                 }
 
