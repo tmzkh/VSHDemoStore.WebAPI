@@ -50,19 +50,32 @@ class DestroyProductsTest extends TestCase
         Storage::fake('azure-assets');
 
         $path = Storage::disk('azure-assets')->putFileAs(
-            $filePath ?? '',
+            '',
             UploadedFile::fake()->create('3d-model.obj', 10000, 'text/plain'),
             'product_'.$this->product->id.'_asset_101010.obj'
         );
 
-        ProductAsset::create([
+        $model = ProductAsset::create([
             'product_id' => $this->product->id,
             'type' => ProductAssetType::MODEL,
             'path' => $path
         ]);
 
         $path = Storage::disk('azure-assets')->putFileAs(
-            $filePath ?? '',
+            '',
+            UploadedFile::fake()->create('material.obj', 10000, 'text/plain'),
+            'product_'.$this->product->id.'_asset_101012.obj'
+        );
+
+        ProductAsset::create([
+            'product_id' => $this->product->id,
+            'model_id' => $model->id,
+            'type' => ProductAssetType::MATERIAL,
+            'path' => $path
+        ]);
+
+        $path = Storage::disk('azure-assets')->putFileAs(
+            '',
             UploadedFile::fake()->create('img.jpeg', 10000, 'image/jpeg'),
             'product_'.$this->product->id.'_asset_101011.jpeg'
         );
@@ -128,13 +141,16 @@ class DestroyProductsTest extends TestCase
 
         $file2Name = 'product_'.$this->product->id.'_asset_101011.jpeg';
 
+        $file3Name = 'product_'.$this->product->id.'_asset_101012.obj';
+
         $this->json('DELETE', '/api/products/' . $this->product->slug)
             ->assertStatus(204);
 
         $this->assertDatabaseCount((new ProductAsset())->getTable(), 0);
 
-        Storage::disk('azure-assets')->assertMissing($file1Name);
-
-        Storage::disk('azure-assets')->assertMissing($file2Name);
+        Storage::disk('azure-assets')
+            ->assertMissing($file1Name)
+            ->assertMissing($file2Name)
+            ->assertMissing($file3Name);
     }
 }
