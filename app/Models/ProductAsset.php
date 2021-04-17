@@ -35,6 +35,9 @@ use Konekt\Enum\Eloquent\CastsEnums;
  * @property string|null $url
  * @method static Builder|ProductAsset whereModelId($value)
  * @method static Builder|ProductAsset whereUrl($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|ProductAsset[] $materials
+ * @property-read int|null $materials_count
+ * @method static Builder|ProductAsset imagesAndModels()
  */
 class ProductAsset extends Model
 {

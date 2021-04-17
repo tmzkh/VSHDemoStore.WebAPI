@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\ClearProductAssetsAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\SaveProductRequest;
 use App\Http\Resources\ProductResource;
@@ -161,8 +162,12 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product, ClearProductAssetsAction $clearProductAssetsAction)
     {
+        if (! $clearProductAssetsAction->execute($product)) {
+            return response()->json(['error' => 'Something went wrong on deleting product assets.'], 500);
+        }
+
         $product->delete();
 
         return response()->json(ProductResource::make($product), 204);

@@ -54,6 +54,13 @@ use Vanilo\Product\Models\Product as BaseProduct;
  * @property-read int|null $taxons_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProductAsset[] $assets
  * @property-read int|null $assets_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProductAsset[] $images
+ * @property-read int|null $images_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProductAsset[] $imagesAndModels
+ * @property-read int|null $images_and_models_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ProductAsset[] $models
+ * @property-read int|null $models_count
+ * @method static Builder|Product fittable()
  */
 class Product extends BaseProduct
 {
