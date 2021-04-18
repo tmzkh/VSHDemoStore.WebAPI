@@ -7,7 +7,14 @@ Tarjoaa web api:n virtuaalisen sovitushuoneen prototyypille.
 ## Asennus
 
 ```bash
-composer install
+$ composer install
+
+$ php artisan migrate
+
+$ php artisan db:seed
+
+# for development
+$ php artisan app:seed-demo-data
 ```
 
 Kopioi `.env.example` tiedostoon `.env` ja konfiguroi tarvittavat tiedot (sovelluksen nimi, url jne, tietokannan tiedot)
@@ -34,5 +41,5 @@ AZURE_STORAGE_CONTAINER_FOR_AVATARS={YOUR_AZURE_STORAGE_AVATAR_CONTAINER_NAME}
 ## Testaus
 
 ```bash
-vendor/bin/phpunit
+$ vendor/bin/phpunit
 ```
